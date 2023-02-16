@@ -37,6 +37,16 @@
         android:layout_marginLeft="25dp"
         android:hint="Name"/>
 
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="72dp"
+        android:text="Email"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
