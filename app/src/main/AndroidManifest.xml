@@ -40,6 +40,7 @@
                 android:value="" />
         </activity>
         <activity android:name=".login" />
+        <activity android:name=".MovieList" ></activity>
     </application>
 
 </manifest>
