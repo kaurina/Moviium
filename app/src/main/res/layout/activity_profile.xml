@@ -38,23 +38,24 @@
         android:layout_marginStart="152dp"
         android:layout_marginTop="20dp"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/relLayout"
-        android:layout_width="405dp"
-        android:layout_height="289dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:orientation="vertical"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         app:layout_constraintEnd_toEndOf="@id/imgProfile"
         app:layout_constraintStart_toStartOf="@id/imgProfile"
-        app:layout_constraintTop_toBottomOf="@id/imgProfile">
+        app:layout_constraintTop_toBottomOf="@id/imgProfile"
+        android:gravity="center_horizontal">
 
         <EditText
             android:id="@+id/txtProfileName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
             android:layout_marginBottom="-52dp"
             android:hint="User Full Name" />
 
@@ -63,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtProfileName"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="75dp"
             android:hint="User Email" />
 
         <EditText
@@ -71,10 +72,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtProfileEmail"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:hint="User Password" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/iconLayout"
