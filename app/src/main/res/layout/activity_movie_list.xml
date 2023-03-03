@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="56dp"
         android:textSize="28dp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -36,7 +36,7 @@
     <ListView
         android:id="@+id/lvCompleted"
         android:layout_width="355dp"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         app:layout_constraintTop_toBottomOf="@+id/txtCompleted"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -58,55 +58,59 @@
     <ListView
         android:id="@+id/lvPlantowatch"
         android:layout_width="355dp"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         app:layout_constraintTop_toBottomOf="@+id/txtPlantowatch"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="10dp"
         />
-
-    <ImageButton
-        android:id="@+id/imgBtnHomeML"
-        android:layout_width="55dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@drawable/homeicon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="35dp"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="15dp"
-        />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center_horizontal"
+        >
 
-    <ImageButton
-        android:id="@+id/imgBtnStarML"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/staricon"
-        app:layout_constraintLeft_toRightOf="@+id/imgBtnHomeML"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/imgBtnEditProfileML"
-        android:layout_marginBottom="15dp"
-        />
+        <ImageButton
+            android:id="@+id/imgBtnHomeML"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/homeicon"
+            />
 
-    <ImageButton
-        android:id="@+id/imgBtnEditProfileML"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="@drawable/editprofilicon"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="35dp"
-        />
+        <ImageButton
+            android:id="@+id/imgBtnStarML"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/staricon"
+            android:layout_marginLeft="100dp"
+            />
+
+        <ImageButton
+            android:id="@+id/imgBtnEditProfileML"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/editprofilicon"
+            android:layout_marginLeft="100dp"
+            />
+
+
+    </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/imgBtnBackML"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/backicon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
