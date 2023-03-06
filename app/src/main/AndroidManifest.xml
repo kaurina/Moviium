@@ -13,6 +13,13 @@
         android:theme="@style/Theme.Moviium"
         tools:targetApi="31">
         <activity
+            android:name=".RatingPage"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Profile"
             android:exported="false">
             <meta-data
@@ -40,7 +47,7 @@
                 android:value="" />
         </activity>
         <activity android:name=".login" />
-        <activity android:name=".MovieList" ></activity>
+        <activity android:name=".MovieList" />
     </application>
 
 </manifest>
