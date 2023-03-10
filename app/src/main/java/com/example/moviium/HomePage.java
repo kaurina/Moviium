@@ -32,6 +32,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentToProfile = new Intent(getApplicationContext(), Profile.class);
+                startActivity(intentToProfile);
             }
         });
 
