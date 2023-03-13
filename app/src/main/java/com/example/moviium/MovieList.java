@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class MovieList extends AppCompatActivity {
+public class MovieList extends BaseActivity {
     ImageButton btnHome, btnFav, btnProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

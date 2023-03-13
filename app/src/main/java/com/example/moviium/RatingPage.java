@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class RatingPage extends AppCompatActivity {
+public class RatingPage extends BaseActivity {
 
     ImageButton btnHome, btnFav, btnProfile;
 
