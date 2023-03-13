@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends BaseActivity {
 
     ImageButton btnHome, btnStar, btnProfile;
 
