@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".RatingPage">
     <ImageButton
-        android:id="@+id/imgBtnLogoutRP"
+        android:id="@+id/imgBtnLogout"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/logout_icon"
