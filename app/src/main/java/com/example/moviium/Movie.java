@@ -1,5 +1,7 @@
 package com.example.moviium;
 
+import android.graphics.drawable.Drawable;
+
 import java.io.Serializable;
 
 public class Movie implements Serializable {
@@ -8,6 +10,10 @@ public class Movie implements Serializable {
     private String comment;
     private int rating;
 
+    public Movie (String movieImage, String movieTitle) {
+        this.movieImage = movieImage;
+        this.movieTitle = movieTitle;
+    }
     public Movie(String movieImage, String movieTitle, String comment, int rating) {
         this.movieImage = movieImage;
         this.movieTitle = movieTitle;
