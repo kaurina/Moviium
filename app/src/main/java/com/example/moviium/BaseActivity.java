@@ -7,7 +7,12 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONObject;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -34,6 +39,20 @@ public class BaseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 startActivity(new Intent(BaseActivity.this, login.class));
+            }
+        });
+
+
+        String url = "";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
             }
         });
 
