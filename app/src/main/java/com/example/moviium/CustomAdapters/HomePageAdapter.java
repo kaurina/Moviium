@@ -1,6 +1,7 @@
 package com.example.moviium.CustomAdapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,8 +19,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.moviium.HomePage;
 import com.example.moviium.Movie;
 import com.example.moviium.R;
+import com.example.moviium.RatingPage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +78,7 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
         viewHolder.movieItemLinearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
 

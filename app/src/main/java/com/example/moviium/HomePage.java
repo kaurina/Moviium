@@ -1,11 +1,14 @@
 package com.example.moviium;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -45,21 +48,44 @@ public class HomePage extends BaseActivity {
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryListOfMovies) {
+
                 // code
                 for (QueryDocumentSnapshot document : queryListOfMovies) {
                     Movie movie; // Save the fields
+                    String id = document.getId();
                     String image = (String) document.getData().get("Image");
                     String title = (String) document.getData().get("Title");
 
                     movie = new Movie(image, title); // object
 
                     listOfMovies.add(movie);
+
+                    Intent intent = new Intent(HomePage.this, RatingPage.class);
+                    intent.putExtra("id", id);
+
                 }
+
+
 
                 // call function / Adapters..
                 // customAdapter
                 HomePageAdapter adapter = new HomePageAdapter(getApplicationContext(), listOfMovies);
                 lvTopMovies.setAdapter(adapter);
+
+                lvTopMovies.setClickable(true);
+                lvTopMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        Movie entry= (Movie) parent.getAdapter().getItem(position);
+                        Intent intent = new Intent(HomePage.this, RatingPage.class);
+                        String message = entry.getMovieTitle();
+                        intent.putExtra(EXTRA_MESSAGE, message);
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
 
