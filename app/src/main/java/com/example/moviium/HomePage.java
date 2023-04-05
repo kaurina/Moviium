@@ -25,7 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePage extends BaseActivity {
+public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClickListener {
 
     ImageButton btnHome, btnStar, btnProfile, btnSignOut;
 
@@ -56,7 +56,7 @@ public class HomePage extends BaseActivity {
                     String image = (String) document.getData().get("Image");
                     String title = (String) document.getData().get("Title");
 
-                    movie = new Movie(image, title); // object
+                    movie = new Movie(image, title, id); // object
 
                     listOfMovies.add(movie);
 
@@ -69,7 +69,7 @@ public class HomePage extends BaseActivity {
 
                 // call function / Adapters..
                 // customAdapter
-                HomePageAdapter adapter = new HomePageAdapter(getApplicationContext(), listOfMovies);
+                HomePageAdapter adapter = new HomePageAdapter(getApplicationContext(), listOfMovies, HomePage.this);
                 lvTopMovies.setAdapter(adapter);
 
                 lvTopMovies.setClickable(true);
@@ -122,5 +122,13 @@ public class HomePage extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onMovieClick(String id) {
+        Intent intent = new Intent(this, RatingPage.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+        finish();
     }
 }
