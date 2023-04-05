@@ -33,11 +33,17 @@ import java.util.ArrayList;
 public class HomePageAdapter extends ArrayAdapter<Movie> {
     ArrayList<Movie> listOfMovies;
     Context context;
+    private OnItemClickListener listener;
 
-    public HomePageAdapter(Context context, ArrayList<Movie> listOfMovies) {
+    public interface OnItemClickListener {
+        void onMovieClick(String id);
+    }
+
+    public HomePageAdapter(Context context, ArrayList<Movie> listOfMovies, OnItemClickListener listener) {
         super(context, R.layout.new_release_item, listOfMovies);
         this.listOfMovies = listOfMovies;
         this.context = context;
+        this.listener = listener;
     }
 
     private static class ViewHolder {
@@ -78,7 +84,7 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
         viewHolder.movieItemLinearlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                listener.onMovieClick(movie.getId());
             }
         });
 

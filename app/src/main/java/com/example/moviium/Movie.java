@@ -5,14 +5,16 @@ import android.graphics.drawable.Drawable;
 import java.io.Serializable;
 
 public class Movie implements Serializable {
+    private String id;
     private String movieImage;
     private String movieTitle;
     private String comment;
     private int rating;
 
-    public Movie (String movieImage, String movieTitle) {
+    public Movie (String movieImage, String movieTitle, String id) {
         this.movieImage = movieImage;
         this.movieTitle = movieTitle;
+        this.id = id;
     }
     public Movie(String movieImage, String movieTitle, String comment, int rating) {
         this.movieImage = movieImage;
@@ -51,5 +53,13 @@ public class Movie implements Serializable {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
