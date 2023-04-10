@@ -41,51 +41,32 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
         setContentView(R.layout.home_page);
 
         lvTopMovies = findViewById(R.id.movieListView);
-
+        //accessing movie table
         moviesRef = db.collection("Movies");
+        //accessing all items in movie table, in list form
         Query query = moviesRef.orderBy("Release Date", Query.Direction.DESCENDING).limit(4);
 
+        //specifying which properties we want (id, image, title)
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryListOfMovies) {
 
-                // code
+                //iterate through list
                 for (QueryDocumentSnapshot document : queryListOfMovies) {
                     Movie movie; // Save the fields
                     String id = document.getId();
                     String image = (String) document.getData().get("Image");
                     String title = (String) document.getData().get("Title");
 
-                    movie = new Movie(image, title, id); // object
+                    //using constructor from movie class
+                    movie = new Movie(image, title, id);
 
                     listOfMovies.add(movie);
-
-                    Intent intent = new Intent(HomePage.this, RatingPage.class);
-                    intent.putExtra("id", id);
-
                 }
 
-
-
-                // call function / Adapters..
                 // customAdapter
                 HomePageAdapter adapter = new HomePageAdapter(getApplicationContext(), listOfMovies, HomePage.this);
                 lvTopMovies.setAdapter(adapter);
-
-                lvTopMovies.setClickable(true);
-                lvTopMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        Movie entry= (Movie) parent.getAdapter().getItem(position);
-                        Intent intent = new Intent(HomePage.this, RatingPage.class);
-                        String message = entry.getMovieTitle();
-                        intent.putExtra(EXTRA_MESSAGE, message);
-                        startActivity(intent);
-                    }
-                });
-
             }
         });
 
@@ -124,6 +105,8 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
 
     }
 
+
+    //comes from interface created in adapter
     @Override
     public void onMovieClick(String id) {
         Intent intent = new Intent(this, RatingPage.class);

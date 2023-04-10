@@ -1,7 +1,6 @@
 package com.example.moviium.CustomAdapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,10 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.moviium.HomePage;
 import com.example.moviium.Movie;
 import com.example.moviium.R;
-import com.example.moviium.RatingPage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,23 +27,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class HomePageAdapter extends ArrayAdapter<Movie> {
-    ArrayList<Movie> listOfMovies;
+public class PlanToWatchAdapter extends ArrayAdapter<Movie> {
+    ArrayList<Movie> watchList;
     Context context;
-    //object from interface
-    private OnItemClickListener listener;
 
-    //has a function to take id from item in homepage list
-    public interface OnItemClickListener {
-        //defined in HomePage activity
-        void onMovieClick(String id);
-    }
 
-    public HomePageAdapter(Context context, ArrayList<Movie> listOfMovies, OnItemClickListener listener) {
-        super(context, R.layout.new_release_item, listOfMovies);
-        this.listOfMovies = listOfMovies;
+    public PlanToWatchAdapter(Context context, ArrayList<Movie> watchList) {
+        super(context, R.layout.movie_list_plantowatch_items);
         this.context = context;
-        this.listener = listener;
+        this.watchList = watchList;
     }
 
     private static class ViewHolder {
@@ -58,28 +47,23 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Movie movie = watchList.get(position);
+        PlanToWatchAdapter.ViewHolder viewHolder;
 
-        Movie movie = listOfMovies.get(position);
-        ViewHolder viewHolder;
-
-        //convertView object holds the whole item/row
         if (convertView == null) {
 
-            viewHolder = new ViewHolder();
+            viewHolder = new PlanToWatchAdapter.ViewHolder();
             //
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            //inflator populates empty view with our design elements
-            convertView = inflater.inflate(R.layout.new_release_item, parent, false);
+            convertView = inflater.inflate(R.layout.movie_list_plantowatch_items, parent, false);
 
-            //viewHolder only holds parts of the convertView
             viewHolder.movieItemLinearlayout = (LinearLayout) convertView.findViewById(R.id.movie_item_linearlayout);
-            viewHolder.movieImg = (ImageView) convertView.findViewById(R.id.movie_icon);
-            viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtmovie_description);
+            viewHolder.movieImg = (ImageView) convertView.findViewById(R.id.movieIcon_PTW);
+            viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.movieName_PTW);
 
-            //a tag makes the convertView see where the viewHolder is
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (PlanToWatchAdapter.ViewHolder) convertView.getTag();
         }
 
         try {
@@ -89,23 +73,15 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
         }
         viewHolder.txtTitle.setText(movie.getMovieTitle());
 
-        //when the item linear layout is clicked on, get the id
-        viewHolder.movieItemLinearlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onMovieClick(movie.getId());
-            }
-        });
-
         return convertView;
-
     }
 
+    //where do we call this?
     public void reload() {notifyDataSetChanged();}
 
 
 
-    //convert url to image
+
     public Drawable drawableFromUrl(String url) throws IOException {
         Bitmap x;
 
@@ -119,4 +95,7 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
         x = BitmapFactory.decodeStream(input);
         return new BitmapDrawable(Resources.getSystem(), x);
     }
+
 }
+
+
