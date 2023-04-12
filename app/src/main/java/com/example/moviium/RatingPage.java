@@ -18,8 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moviium.CustomAdapters.HomePageAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,6 +29,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,9 +47,11 @@ public class RatingPage extends BaseActivity {
     ImageView movieImg;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
     CollectionReference moviesRef; // tables
+    CollectionReference watchlistRef; // tables
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
-
+    String watchlistDocumentId = "";
+    String movieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +71,7 @@ public class RatingPage extends BaseActivity {
         btnToWatch = findViewById(R.id.imgBtnWatchList);
 
         Intent intent = getIntent();
-        String movieId = intent.getStringExtra("id");
+        movieId = intent.getStringExtra("id");
 
         moviesRef = db.collection("Movies");
         DocumentReference query = moviesRef.document(movieId);
@@ -108,30 +114,48 @@ public class RatingPage extends BaseActivity {
             }
         });
 
-
+        watchlistRef = db.collection("WatchList");
 
         btnToWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String,Object> data = new HashMap<>();
-                data.put("Movie_ID",movieId);
-                data.put("User_ID",uid);
+                if(!watchlistDocumentId.isEmpty()){
+                    DocumentReference docRef = watchlistRef.document(watchlistDocumentId);
+                    docRef.delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    watchlistDocumentId = "";
+                                    btnToWatch.setBackgroundResource(R.drawable.addimage);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Handle errors
+                                }
+                            });
+                } else {
+                    Map<String,Object> data = new HashMap<>();
+                    data.put("Movie_ID",movieId);
+                    data.put("User_ID",uid);
 
-                db.collection("WatchList").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(RatingPage.this, "Movie successfully added to Watch List", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RatingPage.this, MovieList.class));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RatingPage.this, "Oops, something went wrong!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    db.collection("WatchList").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(RatingPage.this, "Movie successfully added to Watch List", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RatingPage.this, MovieList.class));
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RatingPage.this, "Oops, something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
         });
-
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +180,34 @@ public class RatingPage extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Query queryWatchlist = watchlistRef.whereEqualTo("User_ID", uid).whereEqualTo("Movie_ID", movieId);
+
+        queryWatchlist.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            int count = querySnapshot.size();
+                            if(count > 0){
+                                btnToWatch.setBackgroundResource(R.drawable.removeimage);
+                                for (QueryDocumentSnapshot document : querySnapshot) {
+                                    watchlistDocumentId = document.getId();
+                                }
+                            } else {
+                                watchlistDocumentId = "";
+                                btnToWatch.setBackgroundResource(R.drawable.addimage);
+                            }
+                        } else {
+                            // Handle errors
+                        }
+                    }
+                });
     }
 
     public Drawable drawableFromUrl(String url) throws IOException {
