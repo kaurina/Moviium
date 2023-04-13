@@ -107,7 +107,7 @@ public class RatingPage extends BaseActivity {
                 genres.setText(genreList);
 
                 try{
-                    movieImg.setImageDrawable(drawableFromUrl(imageUrl));
+                    movieImg.setImageDrawable(HelperClass.drawableFromUrl(imageUrl));
                 } catch (IOException e){
                     throw new RuntimeException(e);
                 }
@@ -210,17 +210,17 @@ public class RatingPage extends BaseActivity {
                 });
     }
 
-    public Drawable drawableFromUrl(String url) throws IOException {
-        Bitmap x;
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.connect();
-        InputStream input = connection.getInputStream();
-
-        x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(Resources.getSystem(), x);
-    }
+//    public Drawable drawableFromUrl(String url) throws IOException {
+//        Bitmap x;
+//
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
+//
+//        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+//        connection.connect();
+//        InputStream input = connection.getInputStream();
+//
+//        x = BitmapFactory.decodeStream(input);
+//        return new BitmapDrawable(Resources.getSystem(), x);
+//    }
 }
