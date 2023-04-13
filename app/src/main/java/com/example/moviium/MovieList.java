@@ -12,7 +12,10 @@ import android.widget.ListView;
 import com.example.moviium.CustomAdapters.HomePageAdapter;
 import com.example.moviium.CustomAdapters.PlanToWatchAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,10 +27,15 @@ public class MovieList extends BaseActivity {
     ImageButton btnHome, btnFav, btnProfile;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
-    CollectionReference watchListRef; // tables
+    CollectionReference watchListRef, moviesRef; // tables
 
     ArrayList<Movie> listOfMovies = new ArrayList<>();
     ListView lvPlanToWatch;
+
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+
+    ArrayList<String> listOfMovieIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,31 +48,48 @@ public class MovieList extends BaseActivity {
         lvPlanToWatch = findViewById(R.id.lvPlantowatch);
 
         watchListRef = db.collection("Watchlist");
-        Query query = watchListRef;
+        Query queryWatchlist = watchListRef.whereEqualTo("User_ID", uid);
 
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        queryWatchlist.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryListOfMovies) {
                 for (QueryDocumentSnapshot document : queryListOfMovies) {
-                    Movie movie; // Save the fields
-                    String id = document.getId();
-                    //String image = (String) document.getData().get("User_ID");
-                    String title = (String) document.getData().get("Movie_ID");
 
-                    //movie = new Movie(image, title, id);
-//                    movie.setMovieImage(image);
+                    String id = (String) document.getData().get("Movie_ID"); // fetch ids from the table
+                    listOfMovieIds.add(id); // add ids to list
 
-                    movie = new Movie();
-                    movie.setMovieTitle(title);
-                    listOfMovies.add(movie);
                 }
 
-                // customAdapter
-                PlanToWatchAdapter adapter = new PlanToWatchAdapter(getApplicationContext(), listOfMovies);
-                lvPlanToWatch.setAdapter(adapter);
+
             }
         });
 
+        moviesRef = db.collection("Movies");
+
+        //Query queryMovies = moviesRef.whereEqualTo("Movie_ID", )
+
+
+
+//        Query queryMovies = moviesRef.whereArrayContainsAny(com.google.firebase.firestore.FieldPath.documentId(), listOfMovieIds);
+//
+//        queryMovies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                    Movie movie;
+//                    String id = document.getId();
+//                    String image = (String) document.getData().get("Image");
+//                    String title = (String) document.getData().get("Title");
+//
+//
+//                    movie = new Movie(image, title, id);
+//                    listOfMovies.add(movie);
+//                }
+//
+//                PlanToWatchAdapter adapter = new PlanToWatchAdapter(getApplicationContext(), listOfMovies);
+//                lvPlanToWatch.setAdapter(adapter);
+//            }
+//        });
 
 
 
