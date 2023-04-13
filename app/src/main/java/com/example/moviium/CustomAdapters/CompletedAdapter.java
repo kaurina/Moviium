@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.moviium.HelperClass;
 import com.example.moviium.Movie;
 import com.example.moviium.R;
 
@@ -70,7 +71,7 @@ public class CompletedAdapter extends ArrayAdapter<Movie> {
         }
 
         try {
-            viewHolder.movieImg.setImageDrawable(drawableFromUrl(movie.getMovieImage()));
+            viewHolder.movieImg.setImageDrawable(HelperClass.drawableFromUrl(movie.getMovieImage()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -82,17 +83,17 @@ public class CompletedAdapter extends ArrayAdapter<Movie> {
 
     public void reload() {notifyDataSetChanged();}
 
-    public Drawable drawableFromUrl(String url) throws IOException {
-        Bitmap x;
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.connect();
-        InputStream input = connection.getInputStream();
-
-        x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(Resources.getSystem(), x);
-    }
+//    public Drawable drawableFromUrl(String url) throws IOException {
+//        Bitmap x;
+//
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
+//
+//        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+//        connection.connect();
+//        InputStream input = connection.getInputStream();
+//
+//        x = BitmapFactory.decodeStream(input);
+//        return new BitmapDrawable(Resources.getSystem(), x);
+//    }
 }
