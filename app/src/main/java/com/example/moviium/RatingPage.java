@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RatingPage extends BaseActivity {
-
+    Button btnAddRating;
     ImageButton btnHome, btnFav, btnProfile, btnToWatch;
     TextView title, storyLine, genres, actors, dbRating, myRating;
     ImageView movieImg;
@@ -69,6 +70,7 @@ public class RatingPage extends BaseActivity {
         dbRating = findViewById(R.id.txtRating);
         myRating = findViewById(R.id.myRating);
         btnToWatch = findViewById(R.id.imgBtnWatchList);
+        btnAddRating = findViewById(R.id.btnAddRating);
 
         Intent intent = getIntent();
         movieId = intent.getStringExtra("id");
@@ -114,7 +116,7 @@ public class RatingPage extends BaseActivity {
             }
         });
 
-        watchlistRef = db.collection("WatchList");
+        watchlistRef = db.collection("Watchlist");
 
         btnToWatch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +142,7 @@ public class RatingPage extends BaseActivity {
                     data.put("Movie_ID",movieId);
                     data.put("User_ID",uid);
 
-                    db.collection("WatchList").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    db.collection("Watchlist").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(RatingPage.this, "Movie successfully added to Watch List", Toast.LENGTH_SHORT).show();
@@ -154,6 +156,30 @@ public class RatingPage extends BaseActivity {
                     });
                 }
 
+            }
+        });
+
+        btnAddRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String,Object> data = new HashMap<>();
+                data.put("Movie_ID",movieId);
+                data.put("Rating", myRating);
+                data.put("User_ID",uid);
+
+
+                db.collection("Ratings").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(RatingPage.this, "Rating added!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RatingPage.this, MovieList.class));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RatingPage.this, "Oops, something went wrong!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -208,6 +234,8 @@ public class RatingPage extends BaseActivity {
                         }
                     }
                 });
+
+
     }
 
 //    public Drawable drawableFromUrl(String url) throws IOException {
