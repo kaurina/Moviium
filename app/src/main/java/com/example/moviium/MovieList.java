@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.moviium.CustomAdapters.HomePageAdapter;
 import com.example.moviium.CustomAdapters.PlanToWatchAdapter;
@@ -27,7 +28,7 @@ public class MovieList extends BaseActivity {
     ImageButton btnHome, btnFav, btnProfile;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
-    CollectionReference watchListRef, moviesRef; // tables
+    CollectionReference watchListRef, moviesRef, ratingRef; // tables
 
     ArrayList<Movie> listOfMovies = new ArrayList<>();
     ListView lvPlanToWatch;
@@ -36,6 +37,10 @@ public class MovieList extends BaseActivity {
     String uid = user.getUid();
 
     ArrayList<String> listOfMovieIds = new ArrayList<>();
+    ArrayList<String> listOfRatings = new ArrayList<>();
+
+    // Test
+    TextView txtPlanToWatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,12 @@ public class MovieList extends BaseActivity {
         btnFav = findViewById(R.id.imgBtnStarML);
         lvPlanToWatch = findViewById(R.id.lvPlantowatch);
 
+        // test
+        txtPlanToWatch = findViewById(R.id.txtPlantowatch);
+
+
         watchListRef = db.collection("Watchlist");
+        //Query queryWatchlist = watchListRef;
         Query queryWatchlist = watchListRef.whereEqualTo("User_ID", uid);
 
         queryWatchlist.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -58,18 +68,48 @@ public class MovieList extends BaseActivity {
                     String id = (String) document.getData().get("Movie_ID"); // fetch ids from the table
                     listOfMovieIds.add(id); // add ids to list
 
+                    //String id = document.getId();
+                    //String userId = (String) document.getData().get("User_ID");
+                    //String movieId = (String) document.getData().get("Movie_ID");
+
+                    //listOfMovieIds.add(userId);
+                    //listOfMovieIds.add(movieId);
                 }
 
+                //String stringIds = String.join(", ", listOfMovieIds);
+//                if (listOfMovieIds.isEmpty()) {
+//                    txtPlanToWatch.setText("Empty");
+//                }
+
+                //txtPlanToWatch.setText(stringIds);
 
             }
         });
 
-        moviesRef = db.collection("Movies");
+//        moviesRef = db.collection("Movies");
+//        Query queryMovies = moviesRef.whereIn("movieId", listOfMovieIds);
+//        queryMovies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                    Movie movie;
+//                    String id = document.getId();
+//                    String image = (String) document.getData().get("Image");
+//                    String title = (String) document.getData().get("Title");
+//
+//
+//                    movie = new Movie(image, title, id);
+//                    listOfMovies.add(movie);
+//                }
+//
+//                PlanToWatchAdapter adapter = new PlanToWatchAdapter(getApplicationContext(), listOfMovies);
+//                lvPlanToWatch.setAdapter(adapter);
+//            }
+//        });
 
-        //Query queryMovies = moviesRef.whereEqualTo("Movie_ID", )
 
-
-
+//        moviesRef = db.collection("Movies");
+//        //Query queryMovies = moviesRef.whereIn("movieId", listOfMovieIds);
 //        Query queryMovies = moviesRef.whereArrayContainsAny(com.google.firebase.firestore.FieldPath.documentId(), listOfMovieIds);
 //
 //        queryMovies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -91,7 +131,27 @@ public class MovieList extends BaseActivity {
 //            }
 //        });
 
+        ratingRef = db.collection("Ratings");
+        Query queryRatings = ratingRef.whereEqualTo("User_ID", uid);
 
+        queryRatings.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    String movieId = (String) document.getData().get("Movie_ID");
+                    String rating = (String) document.getData().get("Rating");
+
+
+                    listOfRatings.add(movieId);
+                    listOfRatings.add(rating);
+
+                }
+
+                
+
+            }
+        });
 
 
         btnHome.setOnClickListener(new View.OnClickListener() {
