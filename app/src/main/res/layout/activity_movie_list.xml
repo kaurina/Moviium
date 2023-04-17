@@ -45,8 +45,8 @@
 
     <TextView
         android:id="@+id/txtPlantowatch"
-        android:layout_width="344dp"
-        android:layout_height="66dp"
+        android:layout_width="122dp"
+        android:layout_height="26dp"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="15dp"
         android:text="Plan To Watch"

@@ -1,21 +1,19 @@
 package com.example.moviium;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.moviium.CustomAdapters.HomePageAdapter;
 import com.example.moviium.CustomAdapters.PlanToWatchAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -52,8 +50,6 @@ public class MovieList extends BaseActivity {
         btnFav = findViewById(R.id.imgBtnStarML);
         lvPlanToWatch = findViewById(R.id.lvPlantowatch);
 
-        // test
-        txtPlanToWatch = findViewById(R.id.txtPlantowatch);
 
 
         watchListRef = db.collection("Watchlist");
@@ -68,26 +64,26 @@ public class MovieList extends BaseActivity {
                     String id = (String) document.getData().get("Movie_ID"); // fetch ids from the table
                     listOfMovieIds.add(id); // add ids to list
 
-                    //String id = document.getId();
-                    //String userId = (String) document.getData().get("User_ID");
-                    //String movieId = (String) document.getData().get("Movie_ID");
-
-                    //listOfMovieIds.add(userId);
-                    //listOfMovieIds.add(movieId);
                 }
-
-                //String stringIds = String.join(", ", listOfMovieIds);
-//                if (listOfMovieIds.isEmpty()) {
-//                    txtPlanToWatch.setText("Empty");
-//                }
-
-                //txtPlanToWatch.setText(stringIds);
-
             }
         });
 
+        moviesRef = db.collection("Movies");
+        for(String id : listOfMovieIds){
+            DocumentReference queryMovies = moviesRef.document(id);
+
+            queryMovies.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+
+                    }
+                }
+            });
+        }
+
 //        moviesRef = db.collection("Movies");
-//        Query queryMovies = moviesRef.whereIn("movieId", listOfMovieIds);
+//        Query queryMovies = moviesRef.whereIn(FieldPath.documentId(), listOfMovieIds);
 //        queryMovies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 //            @Override
 //            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
