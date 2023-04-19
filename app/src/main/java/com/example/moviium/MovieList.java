@@ -136,11 +136,11 @@ public class MovieList extends BaseActivity {
 
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     String movieId = (String) document.getData().get("Movie_ID");
-                    String rating = (String) document.getData().get("Rating");
+                    Double rating = (Double) document.getData().get("Rating");
 
 
                     listOfRatings.add(movieId);
-                    listOfRatings.add(rating);
+                    listOfRatings.add(rating.toString());
 
                 }
 

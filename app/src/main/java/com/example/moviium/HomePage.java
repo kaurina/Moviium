@@ -3,8 +3,10 @@ package com.example.moviium;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -75,7 +77,6 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
         btnHome = findViewById(R.id.imgBtnHomeHM);
         btnStar = findViewById(R.id.imgBtnStarHM);
         btnProfile = findViewById(R.id.imgBtnProfileHM);
-        btnSignOut = findViewById(R.id.imgBtnLogout);
 
         btnStar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,16 +94,6 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
             }
         });
 
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.getCurrentUser();
-                mAuth.signOut();
-                //Toast.makeText(HomePage.this, "", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HomePage.this, login.class));
-            }
-        });
-
     }
 
 
@@ -114,4 +105,5 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
         startActivity(intent);
         finish();
     }
+
 }
