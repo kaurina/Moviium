@@ -8,9 +8,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,8 +21,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.moviium.CustomAdapters.CommentAdapter;
 import com.example.moviium.CustomAdapters.HomePageAdapter;
@@ -58,7 +63,7 @@ import java.util.Map;
 public class RatingPage extends BaseActivity {
 
     ImageButton btnHome, btnFav, btnProfile, btnToWatch;
-    TextView title, storyLine, genres, actors, dbRating, myRating;
+    TextView title, storyLine, genres, actors, dbRating;
     Button btnComment;
     EditText editTextComments;
     ImageView movieImg;
@@ -73,6 +78,8 @@ public class RatingPage extends BaseActivity {
     String movieId;
     ListView lvComments;
     ArrayList<Comment> comments;
+    RatingBar ratingBar;
+    String ratingDocId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +95,15 @@ public class RatingPage extends BaseActivity {
         genres = findViewById(R.id.txtGenreRP);
         actors = findViewById(R.id.txtActorsRP);
         dbRating = findViewById(R.id.txtRating);
-        myRating = findViewById(R.id.myRating);
+        ratingBar = findViewById(R.id.ratingBar);
         btnToWatch = findViewById(R.id.imgBtnWatchList);
         lvComments = findViewById(R.id.lvComments);
         btnComment = findViewById(R.id.btnComment);
         editTextComments = findViewById(R.id.editTextComments);
         comments = new ArrayList<>();
+
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setBounds(0, 0, 50, 50);
 
         Intent intent = getIntent();
         movieId = intent.getStringExtra("id");
@@ -237,9 +247,41 @@ public class RatingPage extends BaseActivity {
             }
         });
 
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                Map<String,Object> data = new HashMap<>();
+                data.put("Movie_ID",movieId);
+                data.put("User_ID",uid);
+                data.put("Rating",v * 2);
+
+                if(ratingDocId.isEmpty()){
+                    db.collection("Ratings").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            ratingDocId = documentReference.getId();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RatingPage.this, "Oops, something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    db.collection("Ratings").document(ratingDocId).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+
+                        }
+                    });
+
+                }
+
+
+            }
+        });
+
     }
-
-
 
     @Override
     protected void onResume() {
@@ -261,6 +303,30 @@ public class RatingPage extends BaseActivity {
                             } else {
                                 watchlistDocumentId = "";
                                 btnToWatch.setBackgroundResource(R.drawable.addimage);
+                            }
+                        } else {
+                            // Handle errors
+                        }
+                    }
+                });
+
+        Query queryRating = db.collection("Ratings").whereEqualTo("User_ID", uid).whereEqualTo("Movie_ID", movieId);
+
+        queryRating.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            int count = querySnapshot.size();
+                            if(count > 0){
+                                for (QueryDocumentSnapshot document : querySnapshot) {
+                                    ratingDocId = document.getId();
+                                    double rating = ((double) document.getData().get("Rating"))/2;
+                                    ratingBar.setRating((float) rating);
+                                }
+                            } else {
+                                ratingDocId = "";
                             }
                         } else {
                             // Handle errors

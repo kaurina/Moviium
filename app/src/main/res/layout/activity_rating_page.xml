@@ -5,10 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RatingPage">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="@string/app_name" />
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toTopOf="@+id/iconLayout"
         android:layout_marginBottom="80dp">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,15 +31,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            <ImageButton
-                android:id="@+id/imgBtnLogout"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/logout_icon"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"/>
 
             <TextView
                 android:id="@+id/txtRatingRP"
@@ -39,25 +43,24 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="10dp"/>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/txtRatingRP"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:gravity="center_horizontal">
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <ImageView
                     android:id="@+id/imgMovieRP"
                     android:layout_width="80dp"
                     android:layout_height="100dp"
                     android:background="@drawable/image_icon"
-                    app:layout_constraintTop_toBottomOf="@id/txtRatingRP"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="30dp"
                     />
 
 
@@ -68,10 +71,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:text="Rating"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="25dp"
-                    tools:layout_editor_absoluteX="55dp"
-                    tools:layout_editor_absoluteY="26dp"
+                    app:layout_constraintStart_toEndOf="@+id/imgMovieRP"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/txtRating"
                     />
 
                 <TextView
@@ -79,9 +83,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="23dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="40dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/txtRatingLabel" />
 
                 <ImageButton
                     android:id="@+id/imgBtnWatchList"
@@ -89,10 +93,26 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="60dp"
                     android:background="@drawable/addimage"
-                    android:layout_marginTop="30dp"/>
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginRight="30dp"/>
 
 
-            </LinearLayout>
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:rating="0"
+                    app:layout_constraintTop_toBottomOf="@+id/imgBtnWatchList"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imgMovieRP"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
@@ -173,19 +193,6 @@
                 android:layout_marginRight="80dp"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="My Rating: "
-                    android:textSize="16sp"
-                    />
-
-                <EditText
-                    android:id="@+id/myRating"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
             </LinearLayout>
 
             <EditText
