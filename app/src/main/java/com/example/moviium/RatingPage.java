@@ -12,16 +12,24 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.moviium.CustomAdapters.CommentAdapter;
 import com.example.moviium.CustomAdapters.HomePageAdapter;
+import com.example.moviium.Helpers.ListViewUpdate;
+import com.example.moviium.Models.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,27 +39,40 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.type.DateTime;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class RatingPage extends BaseActivity {
 
     ImageButton btnHome, btnFav, btnProfile, btnToWatch;
     TextView title, storyLine, genres, actors, dbRating, myRating;
+    Button btnComment;
+    EditText editTextComments;
     ImageView movieImg;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
     CollectionReference moviesRef; // tables
     CollectionReference watchlistRef; // tables
+    CollectionReference commentsRef; // tables
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+    String email = user.getEmail();
     String watchlistDocumentId = "";
     String movieId;
+    ListView lvComments;
+    ArrayList<Comment> comments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +90,10 @@ public class RatingPage extends BaseActivity {
         dbRating = findViewById(R.id.txtRating);
         myRating = findViewById(R.id.myRating);
         btnToWatch = findViewById(R.id.imgBtnWatchList);
+        lvComments = findViewById(R.id.lvComments);
+        btnComment = findViewById(R.id.btnComment);
+        editTextComments = findViewById(R.id.editTextComments);
+        comments = new ArrayList<>();
 
         Intent intent = getIntent();
         movieId = intent.getStringExtra("id");
@@ -180,7 +205,41 @@ public class RatingPage extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        loadComments();
+
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String comment = editTextComments.getText().toString();
+                if(!comment.isEmpty()){
+                    Map<String,Object> data = new HashMap<>();
+                    Timestamp timestamp = Timestamp.now();
+                    data.put("Movie_ID",movieId);
+                    data.put("User_ID",uid);
+                    data.put("User_Email",email);
+                    data.put("Datetime", timestamp);
+                    data.put("Comment", comment);
+
+                    db.collection("Comments").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            editTextComments.setText("");
+                            loadComments();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RatingPage.this, "Oops, something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
     }
+
+
 
     @Override
     protected void onResume() {
@@ -222,5 +281,48 @@ public class RatingPage extends BaseActivity {
 
         x = BitmapFactory.decodeStream(input);
         return new BitmapDrawable(Resources.getSystem(), x);
+    }
+
+    public void loadComments(){
+        commentsRef = db.collection("Comments");
+        Query queryComments = commentsRef.whereEqualTo("User_ID", uid).whereEqualTo("Movie_ID", movieId).orderBy("Datetime", Query.Direction.DESCENDING);
+
+        queryComments.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryListOfMovies) {
+                comments = new ArrayList<>();
+                //iterate through list
+                for (QueryDocumentSnapshot document : queryListOfMovies) {
+                    Comment comment; // Save the fields
+                    String commentText = (String) document.getData().get("Comment");
+                    Timestamp datetime = (Timestamp) document.getTimestamp("Datetime");
+                    long milliseconds = datetime.getSeconds() * 1000;
+                    Date date = new Date(milliseconds);
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+                    String formattedDate = sdf.format(date);
+                    String userEmail = (String) document.getData().get("User_Email");
+
+                    //using constructor from movie class
+                    comment = new Comment(commentText, formattedDate, userEmail);
+
+                    comments.add(comment);
+                }
+
+                // customAdapter
+                CommentAdapter adapter = new CommentAdapter(getApplicationContext(), comments);
+                lvComments.setAdapter(adapter);
+                ListViewUpdate.getListViewSize(lvComments);
+//                getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
+//                ViewGroup.LayoutParams params = listView.getLayoutParams();
+//                someView.layoutParams =
+//                        LinearLayout.LayoutParams(
+//                                ViewGroup.LayoutParams.MATCH_PARENT,
+//                                ViewGroup.LayoutParams.WRAP_CONTENT)
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RatingPage.this, e.toString(), Toast.LENGTH_LONG).show();}
+        });
     }
 }
