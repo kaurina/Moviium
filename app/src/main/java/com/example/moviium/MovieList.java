@@ -1,18 +1,20 @@
 package com.example.moviium;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.example.moviium.CustomAdapters.HomePageAdapter;
 import com.example.moviium.CustomAdapters.PlanToWatchAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,10 +26,19 @@ public class MovieList extends BaseActivity {
     ImageButton btnHome, btnFav, btnProfile;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
-    CollectionReference watchListRef; // tables
+    CollectionReference watchListRef, moviesRef, ratingRef; // tables
 
     ArrayList<Movie> listOfMovies = new ArrayList<>();
     ListView lvPlanToWatch;
+
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+
+    ArrayList<String> listOfMovieIds = new ArrayList<>();
+    ArrayList<String> listOfRatings = new ArrayList<>();
+
+    // Test
+    TextView txtPlanToWatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,34 +50,104 @@ public class MovieList extends BaseActivity {
         btnFav = findViewById(R.id.imgBtnStarML);
         lvPlanToWatch = findViewById(R.id.lvPlantowatch);
 
-        watchListRef = db.collection("Watchlist");
-        Query query = watchListRef;
 
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+        watchListRef = db.collection("Watchlist");
+        //Query queryWatchlist = watchListRef;
+        Query queryWatchlist = watchListRef.whereEqualTo("User_ID", uid);
+
+        queryWatchlist.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryListOfMovies) {
                 for (QueryDocumentSnapshot document : queryListOfMovies) {
-                    Movie movie; // Save the fields
-                    String id = document.getId();
-                    //String image = (String) document.getData().get("User_ID");
-                    String title = (String) document.getData().get("Movie_ID");
 
-                    //movie = new Movie(image, title, id);
-//                    movie.setMovieImage(image);
+                    String id = (String) document.getData().get("Movie_ID"); // fetch ids from the table
+                    listOfMovieIds.add(id); // add ids to list
 
-                    movie = new Movie();
-                    movie.setMovieTitle(title);
-                    listOfMovies.add(movie);
                 }
-
-                // customAdapter
-                PlanToWatchAdapter adapter = new PlanToWatchAdapter(getApplicationContext(), listOfMovies);
-                lvPlanToWatch.setAdapter(adapter);
             }
         });
 
+        moviesRef = db.collection("Movies");
+        for(String id : listOfMovieIds){
+            DocumentReference queryMovies = moviesRef.document(id);
+
+            queryMovies.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+
+                    }
+                }
+            });
+        }
+
+//        moviesRef = db.collection("Movies");
+//        Query queryMovies = moviesRef.whereIn(FieldPath.documentId(), listOfMovieIds);
+//        queryMovies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                    Movie movie;
+//                    String id = document.getId();
+//                    String image = (String) document.getData().get("Image");
+//                    String title = (String) document.getData().get("Title");
+//
+//
+//                    movie = new Movie(image, title, id);
+//                    listOfMovies.add(movie);
+//                }
+//
+//                PlanToWatchAdapter adapter = new PlanToWatchAdapter(getApplicationContext(), listOfMovies);
+//                lvPlanToWatch.setAdapter(adapter);
+//            }
+//        });
 
 
+//        moviesRef = db.collection("Movies");
+//        //Query queryMovies = moviesRef.whereIn("movieId", listOfMovieIds);
+//        Query queryMovies = moviesRef.whereArrayContainsAny(com.google.firebase.firestore.FieldPath.documentId(), listOfMovieIds);
+//
+//        queryMovies.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                    Movie movie;
+//                    String id = document.getId();
+//                    String image = (String) document.getData().get("Image");
+//                    String title = (String) document.getData().get("Title");
+//
+//
+//                    movie = new Movie(image, title, id);
+//                    listOfMovies.add(movie);
+//                }
+//
+//                PlanToWatchAdapter adapter = new PlanToWatchAdapter(getApplicationContext(), listOfMovies);
+//                lvPlanToWatch.setAdapter(adapter);
+//            }
+//        });
+
+        ratingRef = db.collection("Ratings");
+        Query queryRatings = ratingRef.whereEqualTo("User_ID", uid);
+
+        queryRatings.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    String movieId = (String) document.getData().get("Movie_ID");
+                    Double rating = (Double) document.getData().get("Rating");
+
+
+                    listOfRatings.add(movieId);
+                    listOfRatings.add(rating.toString());
+
+                }
+
+                
+
+            }
+        });
 
 
         btnHome.setOnClickListener(new View.OnClickListener() {

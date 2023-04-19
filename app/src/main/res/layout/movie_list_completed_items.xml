@@ -31,16 +31,6 @@
             android:textSize="18sp"
             />
 
-        <TextView
-            android:id="@+id/comment_CP"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Comment"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            />
 
         <TextView
             android:id="@+id/rate_CP"

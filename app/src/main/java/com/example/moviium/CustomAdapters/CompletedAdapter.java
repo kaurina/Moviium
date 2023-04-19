@@ -28,43 +28,46 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PlanToWatchAdapter extends ArrayAdapter<Movie> {
-    ArrayList<Movie> watchList;
+public class CompletedAdapter extends ArrayAdapter<Movie> {
+
+    ArrayList<Movie> completedList;
     Context context;
 
 
-    public PlanToWatchAdapter(Context context, ArrayList<Movie> watchList) {
-        super(context, R.layout.movie_list_plantowatch_items);
+    public CompletedAdapter(Context context, ArrayList<Movie> completedList) {
+        super(context, R.layout.movie_list_completed_items);
         this.context = context;
-        this.watchList = watchList;
+        this.completedList = completedList;
     }
 
     private static class ViewHolder {
         ImageView movieImg;
         TextView txtTitle;
+        TextView txtRating;
         LinearLayout movieItemLinearlayout;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Movie movie = watchList.get(position);
-        PlanToWatchAdapter.ViewHolder viewHolder;
+        Movie movie = completedList.get(position);
+        CompletedAdapter.ViewHolder viewHolder;
 
         if (convertView == null) {
 
-            viewHolder = new PlanToWatchAdapter.ViewHolder();
+            viewHolder = new CompletedAdapter.ViewHolder();
             //
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.movie_list_plantowatch_items, parent, false);
+            convertView = inflater.inflate(R.layout.movie_list_completed_items, parent, false);
 
             viewHolder.movieItemLinearlayout = (LinearLayout) convertView.findViewById(R.id.movie_item_linearlayout);
-            viewHolder.movieImg = (ImageView) convertView.findViewById(R.id.movieIcon_PTW);
-            viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.movieName_PTW);
+            viewHolder.movieImg = (ImageView) convertView.findViewById(R.id.movieIcon_CP);
+            viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.movieName_CP);
+            viewHolder.txtRating = (TextView) convertView.findViewById(R.id.rate_CP);
 
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (PlanToWatchAdapter.ViewHolder) convertView.getTag();
+            viewHolder = (CompletedAdapter.ViewHolder) convertView.getTag();
         }
 
         try {
@@ -73,13 +76,12 @@ public class PlanToWatchAdapter extends ArrayAdapter<Movie> {
             throw new RuntimeException(e);
         }
         viewHolder.txtTitle.setText(movie.getMovieTitle());
+        viewHolder.txtRating.setText((int) movie.getMyRating());
 
         return convertView;
     }
 
-    //where do we call this?
     public void reload() {notifyDataSetChanged();}
-
 
 //    public Drawable drawableFromUrl(String url) throws IOException {
 //        Bitmap x;
@@ -94,7 +96,4 @@ public class PlanToWatchAdapter extends ArrayAdapter<Movie> {
 //        x = BitmapFactory.decodeStream(input);
 //        return new BitmapDrawable(Resources.getSystem(), x);
 //    }
-
 }
-
-

@@ -235,8 +235,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-
-
     <LinearLayout
         android:id="@+id/iconLayout"
         android:layout_width="match_parent"

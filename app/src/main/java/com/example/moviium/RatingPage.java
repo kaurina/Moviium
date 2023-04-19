@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -61,7 +62,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class RatingPage extends BaseActivity {
-
+    Button btnAddRating;
     ImageButton btnHome, btnFav, btnProfile, btnToWatch;
     TextView title, storyLine, genres, actors, dbRating;
     Button btnComment;
@@ -105,6 +106,7 @@ public class RatingPage extends BaseActivity {
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setBounds(0, 0, 50, 50);
 
+
         Intent intent = getIntent();
         movieId = intent.getStringExtra("id");
 
@@ -142,14 +144,14 @@ public class RatingPage extends BaseActivity {
                 genres.setText(genreList);
 
                 try{
-                    movieImg.setImageDrawable(drawableFromUrl(imageUrl));
+                    movieImg.setImageDrawable(HelperClass.drawableFromUrl(imageUrl));
                 } catch (IOException e){
                     throw new RuntimeException(e);
                 }
             }
         });
 
-        watchlistRef = db.collection("WatchList");
+        watchlistRef = db.collection("Watchlist");
 
         btnToWatch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +177,7 @@ public class RatingPage extends BaseActivity {
                     data.put("Movie_ID",movieId);
                     data.put("User_ID",uid);
 
-                    db.collection("WatchList").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    db.collection("Watchlist").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(RatingPage.this, "Movie successfully added to Watch List", Toast.LENGTH_SHORT).show();
@@ -191,6 +193,7 @@ public class RatingPage extends BaseActivity {
 
             }
         });
+
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,4 +394,5 @@ public class RatingPage extends BaseActivity {
                 Toast.makeText(RatingPage.this, e.toString(), Toast.LENGTH_LONG).show();}
         });
     }
+
 }
