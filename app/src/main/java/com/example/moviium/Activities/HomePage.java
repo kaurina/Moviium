@@ -1,15 +1,7 @@
-package com.example.moviium;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+package com.example.moviium.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +12,11 @@ import android.widget.ListView;
 import androidx.appcompat.widget.SearchView;
 
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.example.moviium.CustomAdapters.HomePageAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.moviium.Models.Movie;
+import com.example.moviium.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -38,7 +28,7 @@ import java.util.List;
 
 public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClickListener {
 
-    ImageButton btnHome, btnStar, btnProfile, btnSignOut;
+    ImageButton btnHome, btnStar;
     SearchView searchView;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
     CollectionReference moviesRef; // tables
@@ -87,7 +77,6 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
 
         btnHome = findViewById(R.id.imgBtnHomeHM);
         btnStar = findViewById(R.id.imgBtnStarHM);
-        btnProfile = findViewById(R.id.imgBtnProfileHM);
 
         btnStar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,13 +86,6 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
             }
         });
 
-        btnProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentToProfile = new Intent(getApplicationContext(), Profile.class);
-                startActivity(intentToProfile);
-            }
-        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -169,7 +151,6 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
         Intent intent = new Intent(this, RatingPage.class);
         intent.putExtra("id", id);
         startActivity(intent);
-        finish();
     }
 
     public void clickedOnSearchedMovie(String id){

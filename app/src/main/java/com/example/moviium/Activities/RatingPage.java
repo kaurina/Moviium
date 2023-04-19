@@ -1,36 +1,31 @@
-package com.example.moviium;
+package com.example.moviium.Activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.moviium.CustomAdapters.CommentAdapter;
-import com.example.moviium.CustomAdapters.HomePageAdapter;
+import com.example.moviium.HelperClass;
 import com.example.moviium.Helpers.ListViewUpdate;
 import com.example.moviium.Models.Comment;
+import com.example.moviium.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,9 +40,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.type.DateTime;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,7 +55,7 @@ import java.util.Map;
 
 public class RatingPage extends BaseActivity {
     Button btnAddRating;
-    ImageButton btnHome, btnFav, btnProfile, btnToWatch;
+    ImageButton btnHome, btnFav, btnToWatch;
     TextView title, storyLine, genres, actors, dbRating;
     Button btnComment;
     EditText editTextComments;
@@ -89,7 +81,6 @@ public class RatingPage extends BaseActivity {
 
         btnHome = findViewById(R.id.imgBtnHomeRP);
         btnFav = findViewById(R.id.imgBtnStarRP);
-        btnProfile = findViewById(R.id.imgBtnProfileRP);
         title = findViewById(R.id.txtRatingRP);
         movieImg = findViewById(R.id.imgMovieRP);
         storyLine = findViewById(R.id.txtStoryline);
@@ -207,14 +198,6 @@ public class RatingPage extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MovieList.class);
-                startActivity(intent);
-            }
-        });
-
-        btnProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Profile.class);
                 startActivity(intent);
             }
         });

@@ -1,17 +1,16 @@
-package com.example.moviium;
+package com.example.moviium.Activities;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.moviium.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class BaseActivity extends AppCompatActivity {
@@ -31,16 +30,6 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
-//        logout = findViewById(R.id.imgBtnLogout);
-//
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                startActivity(new Intent(BaseActivity.this, login.class));
-//            }
-//        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if(toolbar != null){

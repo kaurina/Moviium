@@ -1,13 +1,6 @@
 package com.example.moviium.CustomAdapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.moviium.HelperClass;
-import com.example.moviium.HomePage;
-import com.example.moviium.Movie;
+import com.example.moviium.Models.Movie;
 import com.example.moviium.R;
-import com.example.moviium.RatingPage;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class HomePageAdapter extends ArrayAdapter<Movie> {

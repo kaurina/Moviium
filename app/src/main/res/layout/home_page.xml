@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePage">
+    tools:context=".Activities.HomePage">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -94,13 +94,6 @@
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:background="@drawable/star_icon"
-            android:layout_marginLeft="100dp"/>
-
-        <ImageButton
-            android:id="@+id/imgBtnProfileHM"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/profile_icon"
             android:layout_marginLeft="100dp"/>
 
     </LinearLayout>
