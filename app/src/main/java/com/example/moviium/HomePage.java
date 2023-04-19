@@ -2,21 +2,30 @@ package com.example.moviium;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import androidx.appcompat.widget.SearchView;
+
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.moviium.CustomAdapters.HomePageAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,12 +39,13 @@ import java.util.List;
 public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClickListener {
 
     ImageButton btnHome, btnStar, btnProfile, btnSignOut;
-
+    SearchView searchView;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // database
     CollectionReference moviesRef; // tables
 
     ArrayList<Movie> listOfMovies = new ArrayList<>();
     ListView lvTopMovies;
+    PopupWindow popupWindowSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,7 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
         setContentView(R.layout.home_page);
 
         lvTopMovies = findViewById(R.id.movieListView);
+        searchView = findViewById(R.id.searchView);
         //accessing movie table
         moviesRef = db.collection("Movies");
         //accessing all items in movie table, in list form
@@ -94,6 +105,61 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
             }
         });
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(popupWindowSearch != null){
+                    popupWindowSearch.dismiss();
+                }
+                if(!newText.isEmpty()){
+                    displaySearchResult(newText);
+                }
+
+                return false;
+            }
+        });
+
+    }
+
+    public void displaySearchResult(String q){
+        List<String> result = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
+        Query query = db.collection("Movies");
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    String title = (String) document.getData().get("Title");
+                    if(title.contains(q)){
+                        result.add(title);
+                        ids.add(document.getId());
+                    }
+                }
+
+                if (!result.isEmpty()) {
+                    ListView listView = new ListView(getApplicationContext());
+
+                    ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,result);
+                    listView.setAdapter(adapter);
+                    listView.setBackgroundColor(Color.rgb( 240, 240, 240));
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            clickedOnSearchedMovie(ids.get(position));
+                        }
+                    });
+
+                    popupWindowSearch = new PopupWindow(listView, searchView.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowSearch.showAsDropDown(searchView);
+                }
+            }
+        });
     }
 
 
@@ -104,6 +170,10 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
         intent.putExtra("id", id);
         startActivity(intent);
         finish();
+    }
+
+    public void clickedOnSearchedMovie(String id){
+        onMovieClick(id);
     }
 
 }

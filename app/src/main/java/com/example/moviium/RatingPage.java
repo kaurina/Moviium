@@ -354,7 +354,7 @@ public class RatingPage extends BaseActivity {
 
     public void loadComments(){
         commentsRef = db.collection("Comments");
-        Query queryComments = commentsRef.whereEqualTo("User_ID", uid).whereEqualTo("Movie_ID", movieId).orderBy("Datetime", Query.Direction.DESCENDING);
+        Query queryComments = commentsRef.whereEqualTo("Movie_ID", movieId).orderBy("Datetime", Query.Direction.DESCENDING);
 
         queryComments.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
