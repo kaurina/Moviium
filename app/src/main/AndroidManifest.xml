@@ -13,21 +13,14 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".RatingPage"
+            android:name=".Activities.RatingPage"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Profile"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".HomePage"
+            android:name=".Activities.HomePage"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -46,9 +39,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".login" />
-        <activity android:name=".MovieList" />
-        <activity android:name=".SignUp" />
+        <activity android:name=".Activities.login" />
+        <activity android:name=".Activities.MovieList" />
+        <activity android:name=".Activities.SignUp" />
     </application>
 
 </manifest>

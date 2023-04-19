@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MovieList">
+    tools:context=".Activities.MovieList">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -99,16 +99,6 @@
             android:background="@drawable/staricon"
             android:layout_marginLeft="100dp"
             />
-
-        <ImageButton
-            android:id="@+id/imgBtnEditProfileML"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:background="@drawable/editprofilicon"
-            android:layout_marginLeft="100dp"
-            />
-
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

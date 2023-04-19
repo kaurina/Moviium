@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RatingPage">
+    tools:context=".Activities.RatingPage">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -259,13 +259,6 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="100dp"
             android:background="@drawable/star_icon" />
-
-        <ImageButton
-            android:id="@+id/imgBtnProfileRP"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/profile_icon"
-            android:layout_marginLeft="100dp"/>
 
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.example.moviium;
+package com.example.moviium.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.moviium.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class login extends AppCompatActivity {
