@@ -10,9 +10,6 @@
     android:layout_marginBottom="4dp"
     app:layout_constraintStart_toStartOf="parent">
 
-
-
-
         <TextView
             android:id="@+id/movieName_CP"
             android:layout_width="wrap_content"

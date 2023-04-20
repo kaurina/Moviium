@@ -60,9 +60,10 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
                     String id = document.getId();
                     String image = (String) document.getData().get("Image");
                     String title = (String) document.getData().get("Title");
+                    String director = (String) document.getData().get("Director");
 
                     //using constructor from movie class
-                    movie = new Movie(image, title, id);
+                    movie = new Movie(image, title, id, director);
 
                     listOfMovies.add(movie);
                 }
