@@ -1,90 +1,65 @@
 package com.example.moviium.CustomAdapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moviium.HelperClass;
-import com.example.moviium.Models.Movie;
+import com.example.moviium.Models.PlanToWatch;
 import com.example.moviium.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class PlanToWatchAdapter extends ArrayAdapter<Movie> {
-    ArrayList<Movie> watchList;
-    Context context;
+public class PlanToWatchAdapter extends RecyclerView.Adapter<PlanToWatchAdapter.MyViewHolder> {
+    ArrayList<PlanToWatch> watchList;
 
 
-    public PlanToWatchAdapter(Context context, ArrayList<Movie> watchList) {
-        super(context, R.layout.movie_list_plantowatch_items);
-        this.context = context;
+    public PlanToWatchAdapter(ArrayList<PlanToWatch> watchList) {
         this.watchList = watchList;
-    }
-
-    private static class ViewHolder {
-        ImageView movieImg;
-        TextView txtTitle;
-        LinearLayout movieItemLinearlayout;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Movie movie = watchList.get(position);
-        PlanToWatchAdapter.ViewHolder viewHolder;
-
-        if (convertView == null) {
-
-            viewHolder = new PlanToWatchAdapter.ViewHolder();
-            //
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.movie_list_plantowatch_items, parent, false);
-
-            viewHolder.movieItemLinearlayout = (LinearLayout) convertView.findViewById(R.id.movie_item_linearlayout);
-            viewHolder.movieImg = (ImageView) convertView.findViewById(R.id.movieIcon_PTW);
-            viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.movieName_PTW);
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (PlanToWatchAdapter.ViewHolder) convertView.getTag();
-        }
-
-        try {
-            viewHolder.movieImg.setImageDrawable(HelperClass.drawableFromUrl(movie.getMovieImage()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        viewHolder.txtTitle.setText(movie.getMovieTitle());
-
-        return convertView;
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_plantowatch_items, parent, false);
+        return new MyViewHolder(view);
     }
 
-    //where do we call this?
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.txtTitle.setText(this.watchList.get(position).getMovieTitle());
+    }
+
+    @Override
+    public int getItemCount() {
+        return this.watchList.size();
+    }
+
+    public ArrayList<PlanToWatch> getData(){
+        return this.watchList;
+    }
+
+    public void removeItem(int pos){
+        this.watchList.remove(pos);
+        notifyItemRemoved(pos);
+        notifyItemRangeChanged(pos, getItemCount());
+    }
+
+
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+        private TextView txtTitle;
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtTitle =  itemView.findViewById(R.id.movieName_PTW);
+        }
+    }
     public void reload() {notifyDataSetChanged();}
 
 
-//    public Drawable drawableFromUrl(String url) throws IOException {
-//        Bitmap x;
-//
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//
-//        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-//        connection.connect();
-//        InputStream input = connection.getInputStream();
-//
-//        x = BitmapFactory.decodeStream(input);
-//        return new BitmapDrawable(Resources.getSystem(), x);
-//    }
+
 
 }
 
