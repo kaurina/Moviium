@@ -9,6 +9,7 @@ public class Movie implements Serializable {
     private String movieTitle;
     private String comment;
     private Float myRating, dbRating;
+    private String director;
 
     public float getMyRating() {
         return myRating;
@@ -56,10 +57,11 @@ public class Movie implements Serializable {
 
     public Movie(){}
 
-    public Movie (String movieImage, String movieTitle, String id) {
+    public Movie (String movieImage, String movieTitle, String id, String director) {
         this.movieImage = movieImage;
         this.movieTitle = movieTitle;
         this.id = id;
+        this.director = director;
     }
     public Movie(String movieImage, String movieTitle, float rating) {
         this.movieImage = movieImage;
@@ -98,5 +100,14 @@ public class Movie implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
     }
 }

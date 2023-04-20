@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.moviium.HelperClass;
 import com.example.moviium.Models.Movie;
@@ -41,7 +42,8 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
     private static class ViewHolder {
         ImageView movieImg;
         TextView txtTitle;
-        LinearLayout movieItemLinearlayout;
+        TextView txtDirector;
+        ConstraintLayout movieItemLinearlayout;
     }
 
     @NonNull
@@ -61,10 +63,10 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
             convertView = inflater.inflate(R.layout.new_release_item, parent, false);
 
             //viewHolder only holds parts of the convertView
-            viewHolder.movieItemLinearlayout = (LinearLayout) convertView.findViewById(R.id.movie_item_linearlayout);
+            viewHolder.movieItemLinearlayout = (ConstraintLayout) convertView.findViewById(R.id.movie_item_linearlayout);
             viewHolder.movieImg = (ImageView) convertView.findViewById(R.id.movie_icon);
             viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtmovie_description);
-
+            viewHolder.txtDirector = (TextView) convertView.findViewById(R.id.txtMovieDirector);
             //a tag makes the convertView see where the viewHolder is
             convertView.setTag(viewHolder);
         } else {
@@ -77,6 +79,7 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
             throw new RuntimeException(e);
         }
         viewHolder.txtTitle.setText(movie.getMovieTitle());
+        viewHolder.txtDirector.setText("by " + movie.getDirector());
 
         //when the item linear layout is clicked on, get the id
         viewHolder.movieItemLinearlayout.setOnClickListener(new View.OnClickListener() {
@@ -92,20 +95,4 @@ public class HomePageAdapter extends ArrayAdapter<Movie> {
 
     public void reload() {notifyDataSetChanged();}
 
-
-
-//    //convert url to image
-//    public Drawable drawableFromUrl(String url) throws IOException {
-//        Bitmap x;
-//
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//
-//        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-//        connection.connect();
-//        InputStream input = connection.getInputStream();
-//
-//        x = BitmapFactory.decodeStream(input);
-//        return new BitmapDrawable(Resources.getSystem(), x);
-//    }
 }

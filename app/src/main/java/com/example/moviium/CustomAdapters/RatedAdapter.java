@@ -51,7 +51,6 @@ public class RatedAdapter extends ArrayAdapter<Rating> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.movie_list_completed_items, parent, false);
 
-            viewHolder.movieItemLinearlayout = (LinearLayout) convertView.findViewById(R.id.movie_item_linearlayout);
             viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.movieName_CP);
             viewHolder.txtRating = (TextView) convertView.findViewById(R.id.rate_CP);
 
