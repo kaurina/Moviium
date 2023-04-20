@@ -120,8 +120,10 @@ public class HomePage extends BaseActivity implements HomePageAdapter.OnItemClic
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     String title = (String) document.getData().get("Title");
                     if(title.contains(q)){
-                        result.add(title);
-                        ids.add(document.getId());
+                        if(result.size() < 3){
+                            result.add(title);
+                            ids.add(document.getId());
+                        }
                     }
                 }
 
