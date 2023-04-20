@@ -364,12 +364,6 @@ public class RatingPage extends BaseActivity {
                 CommentAdapter adapter = new CommentAdapter(getApplicationContext(), comments);
                 lvComments.setAdapter(adapter);
                 ListViewUpdate.getListViewSize(lvComments);
-//                getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
-//                ViewGroup.LayoutParams params = listView.getLayoutParams();
-//                someView.layoutParams =
-//                        LinearLayout.LayoutParams(
-//                                ViewGroup.LayoutParams.MATCH_PARENT,
-//                                ViewGroup.LayoutParams.WRAP_CONTENT)
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
